@@ -1,17 +1,22 @@
 {
-  "name": "swot-backend",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "git@github.com:swetankkk/swot-backend.git",
-  "license": "MIT",
-  "scripts": {
-    "start": "pm2 start --no-daemon src/index.js --no-autorestart --watch"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.2",
-    "express": "^4.18.1",
-    "mongoose": "^6.5.4",
-    "pm2": "^5.2.0"
-  }
+	"name": "swot-backend",
+	"version": "1.0.0",
+	"main": "index.js",
+	"repository": "git@github.com:swetankkk/swot-backend.git",
+	"license": "MIT",
+	"scripts": {
+		"start": "pm2 start --no-daemon src/index.js --watch"
+	},
+	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.2",
+		"express": "^4.18.1",
+		"http-status": "^1.5.2",
+		"jsonwebtoken": "^8.5.1",
+		"moment": "^2.29.4",
+		"mongoose": "^6.5.4",
+		"pm2": "^5.2.0",
+		"validator": "^13.7.0"
+	}
 }
