@@ -23,7 +23,19 @@ const userSchema = new mongoose.Schema(
 				}
 			},
 		},
-		password: { type: String, required: true, minlength: 7, select: false },
+		password: {
+			type: String,
+			required: true,
+			trim: true,
+			minlength: 8,
+			validate(value) {
+				if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
+					throw new Error(
+						"Password must contain at least one letter and one number"
+					);
+				}
+			},
+		},
 		role: {
 			type: String,
 			enum: roles,
@@ -54,11 +66,29 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 }
 */
 
-userSchema.statics.isEmailTaken = async function (email, excluedeUserId) {
-	const user = await this.findOne({ email, _id: { $ne: excluedeUserId } });
-	console.log("user : ", user);
+userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
+	const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
 	return !!user;
 };
+
+userSchema.statics.isEmailTaken = async function (email, excluedeUserId) {
+	const user = await this.findOne({ email, _id: { $ne: excluedeUserId } });
+	return !!user;
+};
+
+userSchema.methods.isPasswordMatch = async function (password) {
+	const user = this;
+	const a = await bcrypt.compare(password, user.password);
+	return a;
+};
+
+userSchema.pre("save", async function (next) {
+	const user = this;
+	if (user.isModified("password")) {
+		user.password = await bcrypt.hash(user.password, 8);
+	}
+	next();
+});
 
 const User = mongoose.model("User", userSchema);
 

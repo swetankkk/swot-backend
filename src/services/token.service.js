@@ -62,7 +62,26 @@ const saveToken = async (token, userId, expires, type, blacklisted = false) => {
 	return tokenDoc;
 };
 
+const verifyToken = async (token, type) => {
+	console.log("Running verify token : ", token, type);
+	const payload = jwt.verify(token, config.jwt.secret);
+
+	console.log("Payload: ", payload);
+	const tokenDoc = await Token.findOne({
+		token,
+		type,
+		user: payload.sub,
+		blacklisted: false,
+	});
+	console.log("Token Doc");
+	if (!tokenDoc) {
+		throw new Error("token not found");
+	}
+	return tokenDoc;
+};
+
 module.exports = {
 	generateToken,
 	generateAuthTokens,
+	verifyToken,
 };
