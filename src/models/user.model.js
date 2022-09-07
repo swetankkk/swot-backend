@@ -78,8 +78,7 @@ userSchema.statics.isEmailTaken = async function (email, excluedeUserId) {
 
 userSchema.methods.isPasswordMatch = async function (password) {
 	const user = this;
-	const a = await bcrypt.compare(password, user.password);
-	return a;
+	return await bcrypt.compare(password, user.password);
 };
 
 userSchema.pre("save", async function (next) {

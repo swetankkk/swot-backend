@@ -40,7 +40,7 @@ const refreshAuth = async (refreshToken) => {
 	}
 };
 
-const resetPassword = async (resetPasswordToken, password) => {
+const resetPassword = async (resetPasswordToken, newPassword) => {
 	try {
 		console.log("Log 1 :", resetPasswordToken);
 		const resetPasswordTokenDoc = await tokenService.verifyToken(
@@ -54,10 +54,11 @@ const resetPassword = async (resetPasswordToken, password) => {
 			throw new Error();
 		}
 		console.log("Log 4");
-		await userService.updateUserById(user.id, { password: newPassword });
-		console.log("Log 5");
 
 		await Token.deleteMany({ user: user.id, type: tokenTypes.RESET_PASSWORD });
+
+		console.log("Log 5");
+		await userService.updateUserById(user.id, { password: newPassword });
 		console.log("Log 6");
 	} catch (error) {
 		throw new Error(httpStatus.UNAUTHORIZED, "Password reset failed");
