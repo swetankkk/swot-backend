@@ -1,8 +1,9 @@
-const jwt = require("jsonwebtoken");
-const moment = require("moment");
-const config = require("../config/config");
-const { tokenTypes } = require("../config/tokens");
-const { Token } = require("../models");
+const jwt = require('jsonwebtoken');
+const moment = require('moment');
+const config = require('../config/config');
+const { tokenTypes } = require('../config/tokens');
+const { Token } = require('../models');
+const logger = require('../config/logger');
 
 const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
 	const payload = {
@@ -17,7 +18,7 @@ const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
 const generateAuthTokens = async (user) => {
 	const accessTokenExpires = moment().add(
 		config.jwt.accessExpirationMinutes,
-		"minutes"
+		'minutes'
 	);
 	const accessToken = generateToken(
 		user.id,
@@ -27,7 +28,7 @@ const generateAuthTokens = async (user) => {
 
 	const refreshTokenExpires = moment().add(
 		config.jwt.refreshExpirationDays,
-		"days"
+		'days'
 	);
 	const refreshToken = generateToken(
 		user.id,
@@ -63,19 +64,19 @@ const saveToken = async (token, userId, expires, type, blacklisted = false) => {
 };
 
 const verifyToken = async (token, type) => {
-	console.log("Running verify token : ", token, type);
+	logger.info('Running verify token : ', token, type);
 	const payload = jwt.verify(token, config.jwt.secret);
 
-	console.log("Payload: ", payload);
+	logger.info('Payload: ', payload);
 	const tokenDoc = await Token.findOne({
 		token,
 		type,
 		user: payload.sub,
 		blacklisted: false,
 	});
-	console.log("Token Doc");
+	logger.info('Token Doc');
 	if (!tokenDoc) {
-		throw new Error("token not found");
+		throw new Error('token not found');
 	}
 	return tokenDoc;
 };

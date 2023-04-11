@@ -1,11 +1,12 @@
-const httpStatus = require("http-status");
-const catchAsync = require("../utils/catchAsync");
+const httpStatus = require('http-status');
+const catchAsync = require('../utils/catchAsync');
 const {
 	authService,
 	userService,
 	tokenService,
 	//emailService,
-} = require("../services");
+} = require('../services');
+const logger = require('../config/logger');
 
 const register = catchAsync(async (req, res) => {
 	const user = await userService.createUser(req.body);
@@ -41,7 +42,7 @@ const forgotPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-	console.log("request.query.token", req.query.token);
+	logger.info('request.query.token', req.query.token);
 	await authService.resetPassword(req.query.token, req.body.password);
 	res.status(httpStatus.NO_CONTENT).send();
 });

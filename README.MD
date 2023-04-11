@@ -7,6 +7,7 @@ Authentication\
 Authorisation
 Create a standard response
 remove password from register response and store password hash instead of password
+Add debug library instead of console.log statements
 
 ## Nice to Have Features
 

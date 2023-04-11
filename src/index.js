@@ -1,18 +1,19 @@
-const mongoose = require("mongoose");
-const app = require("./app");
-const config = require("./config/config");
+const mongoose = require('mongoose');
+const app = require('./app');
+const config = require('./config/config');
+const logger = require('./config/logger');
 
 let server;
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
 	server = app.listen(config.port, () => {
-		console.log(`Server is running on port ${config.port}`);
+		logger.info(`Server is running on port ${config.port}`);
 	});
 });
 
 const exitHandler = () => {
 	if (server) {
 		server.close(() => {
-			console.log("Server closed");
+			logger.info('Server closed');
 			process.exit(1);
 		});
 	} else {
@@ -21,15 +22,15 @@ const exitHandler = () => {
 };
 
 const unexpectedErrorHandler = (err) => {
-	console.log(err);
+	logger.info(err);
 	exitHandler();
 };
 
-process.on("uncaughtException", unexpectedErrorHandler);
-process.on("unhandledRejection", unexpectedErrorHandler);
+process.on('uncaughtException', unexpectedErrorHandler);
+process.on('unhandledRejection', unexpectedErrorHandler);
 
-process.on("SIGTERM", () => {
-	console.log("SIGTERM signal received.");
+process.on('SIGTERM', () => {
+	logger.info('SIGTERM signal received.');
 	if (server) {
 		server.close(() => {
 			process.exit(1);
@@ -37,8 +38,8 @@ process.on("SIGTERM", () => {
 	}
 });
 
-process.on("SIGINT", function () {
-	console.log("\nGracefully shutting down from SIGINT (Ctrl-C)");
+process.on('SIGINT', function () {
+	logger.info('\nGracefully shutting down from SIGINT (Ctrl-C)');
 	// some other closing procedures go here
 	process.exit(0);
 });
