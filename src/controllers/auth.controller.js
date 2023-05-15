@@ -10,10 +10,24 @@ const logger = require('../config/logger');
 
 const register = catchAsync(async (req, res) => {
 	const user = await userService.createUser(req.body);
+	logger.info('Running register : ', user);
+	if (user === Error) {
+		logger.info('Running Error');
+		return res
+			.status(httpStatus['200_Email already exists'])
+			.statusMessage(
+				'Account already exists with the Email, Please try loging in or Signup with another email'
+			)
+			.send();
+	}
 	const tokens = await tokenService.generateAuthTokens(user);
 	//await emailService.sendVerificationEmail(user, tokens.verificationToken);
 	//remove password from response and check other parameters
-	res.status(httpsStatus.CREATED).send({ user, tokens });
+	res.status(httpStatus.CREATED).send({
+		success: true,
+		message: 'Registration Successful',
+		data: { user, tokens },
+	});
 });
 
 const login = catchAsync(async (req, res) => {

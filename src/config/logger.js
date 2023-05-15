@@ -49,4 +49,7 @@ logger.stream = {
 	},
 };
 
+const logHelper = {
+	log: logger.info.bind(logger),
+};
 module.exports = logger;
