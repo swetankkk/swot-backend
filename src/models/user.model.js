@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema(
 					);
 				}
 			},
+			private: true,
 		},
 		role: {
 			type: String,

@@ -4,11 +4,12 @@ const userService = require('./user.service');
 const Token = require('../models/token.model');
 const { tokenTypes } = require('../config/tokens');
 const logger = require('../config/logger');
+const ApiError = require('../utils/ApiError');
 
 const loginUserWithEmailAndPassword = async (email, password) => {
 	const user = await userService.getUserByEmail(email);
 	if (!user || !(await user.isPasswordMatch(password))) {
-		throw new Error(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
+		throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
 	}
 	return user;
 };
@@ -19,7 +20,7 @@ const logout = async (refreshToken) => {
 		tokenTypes.REFRESH
 	);
 	if (!refreshTokenDoc) {
-		throw new Error(httpStatus.UNAUTHORIZED, 'Invalid token');
+		throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid token');
 	}
 	await refreshTokenDoc.remove();
 };
@@ -37,32 +38,26 @@ const refreshAuth = async (refreshToken) => {
 		await refreshTokenDoc.remove();
 		return tokenService.generateAuthTokens(user);
 	} catch (error) {
-		throw new Error(httpStatus.UNAUTHORIZED, 'Invalid token');
+		throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid token');
 	}
 };
 
 const resetPassword = async (resetPasswordToken, newPassword) => {
 	try {
-		logger.info('Log 1 :', resetPasswordToken);
 		const resetPasswordTokenDoc = await tokenService.verifyToken(
 			resetPasswordToken,
 			tokenTypes.RESET_PASSWORD
 		);
-		logger.info('Log 2');
 		const user = await userService.getUserById(resetPasswordTokenDoc.user);
-		logger.info('Log 3');
 		if (!user) {
 			throw new Error();
 		}
-		logger.info('Log 4');
 
 		await Token.deleteMany({ user: user.id, type: tokenTypes.RESET_PASSWORD });
 
-		logger.info('Log 5');
 		await userService.updateUserById(user.id, { password: newPassword });
-		logger.info('Log 6');
 	} catch (error) {
-		throw new Error(httpStatus.UNAUTHORIZED, 'Password reset failed');
+		throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
 	}
 };
 
@@ -79,7 +74,7 @@ const verifyEmail = async (verifyEmailToken) => {
 		await Token.deleteMany({ user: user.id, type: tokenTypes.VERIFY_EMAIL });
 		await userService.updateUserById(user.id, { isEmailVerified: true });
 	} catch (error) {
-		throw new Error(httpStatus.UNAUTHORIZED, 'Email verification failed');
+		throw new ApiError(httpStatus.UNAUTHORIZED, 'Email verification failed');
 	}
 };
 

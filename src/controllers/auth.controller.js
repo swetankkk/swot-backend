@@ -10,9 +10,7 @@ const logger = require('../config/logger');
 
 const register = catchAsync(async (req, res) => {
 	const user = await userService.createUser(req.body);
-	logger.info('Running register : ', user);
 	if (user === Error) {
-		logger.info('Running Error');
 		return res
 			.status(httpStatus['200_Email already exists'])
 			.statusMessage(
@@ -34,7 +32,11 @@ const login = catchAsync(async (req, res) => {
 	const { email, password } = req.body;
 	const user = await authService.loginUserWithEmailAndPassword(email, password);
 	const tokens = await tokenService.generateAuthTokens(user);
-	res.send({ user, tokens });
+	res.send({
+		success: true,
+		message: 'Log in Successful',
+		data: { tokens, user },
+	});
 });
 
 const logout = catchAsync(async (req, res) => {

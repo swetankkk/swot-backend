@@ -1,8 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const routes = require('./routes/v1');
+const helmet = require('helmet');
 
 const app = express();
+app.use(helmet());
 
 //parse json requrest body
 app.use(express.json());
