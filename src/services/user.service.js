@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const { User } = require('../models');
 const logger = require('../config/logger');
 const ApiError = require('../utils/ApiError');
+const { userService } = require('.');
 
 const createUser = async (userBody) => {
 	if (await User.isEmailTaken(userBody.email)) {
@@ -45,6 +46,37 @@ const deleteUserById = async (userId) => {
 	return user;
 };
 
+const getSwots = async (req, res) => {
+	//const swots = userService.getSwots(req.user);
+	//console.log('Req.user :', req.user);
+	const swots = await User.findById(req.user._id);
+	return swots.swot;
+	//console.log('Swots : ', swots.swot);
+};
+
+const modifySwot = async (req, res) => {
+	const swots = await User.findById(req.user._id);
+	if (swots.swot.length > 0) {
+		console.log('Exists : ', swots);
+	} else {
+		await User.findByIdAndUpdate(
+			req.user._id,
+			{
+				swot: [
+					{
+						strength: ['a', 'b', 'c'],
+						weakness: ['a', 'b', 'c'],
+						opportunities: ['a', 'b', 'c'],
+						threats: ['a', 'b', 'c'],
+					},
+				],
+			},
+			{ new: true }
+		);
+	}
+	console.log('Swots', swots);
+};
+
 module.exports = {
 	createUser,
 	getUserByEmail,
@@ -52,4 +84,6 @@ module.exports = {
 	queryUsers,
 	updateUserById,
 	deleteUserById,
+	getSwots,
+	modifySwot,
 };

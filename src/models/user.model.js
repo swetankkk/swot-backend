@@ -46,6 +46,29 @@ const userSchema = new mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
+		swot: [
+			{
+				type: Object,
+				properties: {
+					strength: {
+						type: Array,
+						of: String,
+					},
+					weakness: {
+						type: Array,
+						of: String,
+					},
+					opportunities: {
+						type: Array,
+						of: String,
+					},
+					threats: {
+						type: Array,
+						of: String,
+					},
+				},
+			},
+		],
 	},
 	{
 		timestamps: true,

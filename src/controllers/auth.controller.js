@@ -58,7 +58,7 @@ const forgotPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-	logger.info('request.query.token', req.query.token);
+	//logger.info('request.query.token', req.query.token);
 	await authService.resetPassword(req.query.token, req.body.password);
 	res.status(httpStatus.NO_CONTENT).send();
 });
@@ -76,6 +76,30 @@ const verifyEmail = catchAsync(async (req, res) => {
 	res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getSwots = catchAsync(async (req, res) => {
+	//console.log('Req : ', req.user);
+	const swots = await userService.getSwots(req, res);
+	res.status(httpStatus.OK).send({
+		success: true,
+		message: 'Swots Fetched Successful',
+		data: { swots },
+	});
+});
+const getSwot = catchAsync(async (req, res) => {
+	//console.log('Req : ', req.user);
+	const swots = await userService.getSwots(req, res);
+	res.status(httpStatus.OK).send({
+		success: true,
+		message: 'Swots Fetched Successful',
+		data: { swots },
+	});
+});
+
+const modifySwot = catchAsync(async (req, res) => {
+	const swots = await userService.modifySwot(req, res);
+	console.log('Running modify');
+});
+
 module.exports = {
 	register,
 	login,
@@ -85,4 +109,7 @@ module.exports = {
 	resetPassword,
 	sendVerificationEmail,
 	verifyEmail,
+	getSwots,
+	getSwot,
+	modifySwot,
 };
