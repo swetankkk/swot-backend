@@ -56,25 +56,8 @@ const getSwots = async (req, res) => {
 
 const modifySwot = async (req, res) => {
 	const swots = await User.findById(req.user._id);
-	if (swots.swot.length > 0) {
-		console.log('Exists : ', swots);
-	} else {
-		await User.findByIdAndUpdate(
-			req.user._id,
-			{
-				swot: [
-					{
-						strength: ['a', 'b', 'c'],
-						weakness: ['a', 'b', 'c'],
-						opportunities: ['a', 'b', 'c'],
-						threats: ['a', 'b', 'c'],
-					},
-				],
-			},
-			{ new: true }
-		);
-	}
-	console.log('Swots', swots);
+	await User.findByIdAndUpdate(req.user._id, { swot: req.body }, { new: true });
+	return swots.swot;
 };
 
 module.exports = {

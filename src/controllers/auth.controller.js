@@ -97,7 +97,6 @@ const getSwot = catchAsync(async (req, res) => {
 
 const modifySwot = catchAsync(async (req, res) => {
 	const swots = await userService.modifySwot(req, res);
-	console.log('Running modify');
 });
 
 module.exports = {
