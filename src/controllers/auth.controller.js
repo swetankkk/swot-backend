@@ -86,13 +86,22 @@ const getSwots = catchAsync(async (req, res) => {
 	});
 });
 const getSwot = catchAsync(async (req, res) => {
-	//console.log('Req : ', req.user);
+	console.log('Req : ', req.params.id);
 	const swots = await userService.getSwots(req, res);
-	res.status(httpStatus.OK).send({
-		success: true,
-		message: 'Swots Fetched Successful',
-		data: { swots },
-	});
+	const swot = swots[req.params.id];
+	console.log('Swot : ', swot);
+	if (swots[req.params.id])
+		res.status(httpStatus.OK).send({
+			success: true,
+			message: 'Swot Fetched Successful',
+			data: { swot },
+		});
+	else {
+		res.status(httpStatus.NOT_FOUND).send({
+			success: false,
+			message: 'Swot Not Found',
+		});
+	}
 });
 
 const modifySwot = catchAsync(async (req, res) => {

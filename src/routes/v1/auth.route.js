@@ -28,13 +28,10 @@ router.post(
 
 //To be added router.post('/logout-all',auth(),authController.logoutAll)
 
-router
-	.route('/getswots')
-	.get(auth(), authController.getSwots)
-	.post(auth(), authController.getSwots);
+router.route('/getswots').get(auth(), authController.getSwots);
 
 router
-	.route('/indivisualswot')
+	.route('/getswot/:id')
 	.get(auth(), authController.getSwot)
 	.patch(auth(), authController.modifySwot);
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
+const httpStatus = require('http-status');
 const { jwtStrategy } = require('./config/passport');
 
 const routes = require('./routes/v1');

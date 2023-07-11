@@ -53,6 +53,13 @@ const getSwots = async (req, res) => {
 	return swots.swot;
 	//console.log('Swots : ', swots.swot);
 };
+const getSwot = async (req, res) => {
+	//const swots = userService.getSwots(req.user);
+	//console.log('Req.user :', req.user);
+	const swots = await User.findById(req.user._id);
+	return swots.swot;
+	//console.log('Swots : ', swots.swot);
+};
 
 const modifySwot = async (req, res) => {
 	const swots = await User.findById(req.user._id);
@@ -68,5 +75,6 @@ module.exports = {
 	updateUserById,
 	deleteUserById,
 	getSwots,
+	getSwot,
 	modifySwot,
 };
