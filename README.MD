@@ -8,6 +8,7 @@ Authorisation
 Create a standard response
 remove password from register response and store password hash instead of password
 Add debug library instead of console.log statements
+Fix GetSwot in user.service.js
 
 ## Nice to Have Features
 

@@ -31,8 +31,12 @@ router.post(
 router.route('/getswots').get(auth(), authController.getSwots);
 
 router
-	.route('/getswot/:id')
+	.route('/individualswot/:id')
 	.get(auth(), authController.getSwot)
-	.patch(auth(), authController.modifySwot);
+	.patch(
+		auth(),
+		validate(authValidation.patchIndivisualSwot),
+		authController.modifySwot
+	);
 
 module.exports = router;

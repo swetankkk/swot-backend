@@ -49,6 +49,14 @@ const verifyEmail = {
 	}),
 };
 
+const patchIndivisualSwot = {
+	body: Joi.object().keys({
+		strength: Joi.array().items(Joi.string()).max(3),
+		weakness: Joi.array().items(Joi.string()).max(3),
+		opportunities: Joi.array().items(Joi.string()).max(3),
+		threats: Joi.array().items(Joi.string()).max(3),
+	}),
+};
 module.exports = {
 	register,
 	login,
@@ -57,4 +65,5 @@ module.exports = {
 	forgotPassword,
 	resetPassword,
 	verifyEmail,
+	patchIndivisualSwot,
 };

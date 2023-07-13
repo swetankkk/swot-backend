@@ -54,6 +54,7 @@ const getSwots = async (req, res) => {
 	//console.log('Swots : ', swots.swot);
 };
 const getSwot = async (req, res) => {
+	//to be modified and corrected
 	//const swots = userService.getSwots(req.user);
 	//console.log('Req.user :', req.user);
 	const swots = await User.findById(req.user._id);
@@ -63,7 +64,15 @@ const getSwot = async (req, res) => {
 
 const modifySwot = async (req, res) => {
 	const swots = await User.findById(req.user._id);
-	await User.findByIdAndUpdate(req.user._id, { swot: req.body }, { new: true });
+	const id = req.params.id;
+	const swot = req.body;
+	const update = {
+		[`swot.${id}.strength`]: req.body.strength,
+		[`swot.${id}.weakness`]: req.body.weakness,
+		[`swot.${id}.opportunities`]: req.body.opportunities,
+		[`swot.${id}.threats`]: req.body.threats,
+	};
+	await User.findByIdAndUpdate(req.user._id, { $set: update }, { new: true });
 	return swots.swot;
 };
 

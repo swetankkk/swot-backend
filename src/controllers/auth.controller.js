@@ -86,10 +86,8 @@ const getSwots = catchAsync(async (req, res) => {
 	});
 });
 const getSwot = catchAsync(async (req, res) => {
-	console.log('Req : ', req.params.id);
 	const swots = await userService.getSwots(req, res);
 	const swot = swots[req.params.id];
-	console.log('Swot : ', swot);
 	if (swots[req.params.id])
 		res.status(httpStatus.OK).send({
 			success: true,
@@ -106,6 +104,10 @@ const getSwot = catchAsync(async (req, res) => {
 
 const modifySwot = catchAsync(async (req, res) => {
 	const swots = await userService.modifySwot(req, res);
+	res.status(httpStatus.CREATED).send({
+		success: true,
+		message: 'Swot Modified Successful',
+	});
 });
 
 module.exports = {
