@@ -64,15 +64,63 @@ const getSwot = async (req, res) => {
 const modifySwot = async (req, res) => {
 	const swots = await User.findById(req.user._id);
 	const id = req.params.id;
-	const swot = req.body;
 	const update = {
 		[`swot.${id}.strength`]: req.body.strength,
 		[`swot.${id}.weakness`]: req.body.weakness,
 		[`swot.${id}.opportunities`]: req.body.opportunities,
 		[`swot.${id}.threats`]: req.body.threats,
 	};
+	console.log('Update : ', update);
 	await User.findByIdAndUpdate(req.user._id, { $set: update }, { new: true });
 	return swots.swot;
+};
+/*const renameSwot = async (req, res) => {
+	const swots = await User.findById(req.user._id);
+	const id = req.params.id;
+	const newName = req.body.name;
+	const swot = swots.swot;
+
+	// Copy the swot object and delete the property with the old name
+	const updatedSwot = { ...swot };
+	delete updatedSwot[id];
+
+	// Create the update object with the new name
+	const update = {
+		[`swot.${newName}`]: swot[id],
+	};
+
+	console.log('Update2 : ', update);
+
+	// Update the user with the new swot object
+	await User.findByIdAndUpdate(
+		req.user._id,
+		{ $set: updatedSwot },
+		{ new: true }
+	);
+
+	return updatedSwot;
+};*/
+
+const renameSwot = async (req, res) => {
+	const swots = await User.findById(req.user._id);
+	const id = req.params.id;
+	const newName = req.body.name;
+	const swot = swots.swot;
+
+	// Delete the property with the old name
+
+	// Add the property with the new name
+	swot[newName] = swot[id];
+	delete swot[id];
+
+	// Update the user with the new swot object
+	await User.findByIdAndUpdate(
+		req.user._id,
+		{ $set: { swot: swot } },
+		{ new: true }
+	);
+
+	return swot;
 };
 
 module.exports = {
@@ -85,4 +133,5 @@ module.exports = {
 	getSwots,
 	getSwot,
 	modifySwot,
+	renameSwot,
 };

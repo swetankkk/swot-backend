@@ -77,7 +77,6 @@ const verifyEmail = catchAsync(async (req, res) => {
 });
 
 const getSwots = catchAsync(async (req, res) => {
-	//console.log('Req : ', req.user);
 	const swots = await userService.getSwots(req, res);
 	res.status(httpStatus.OK).send({
 		success: true,
@@ -110,6 +109,14 @@ const modifySwot = catchAsync(async (req, res) => {
 	});
 });
 
+const renameSwot = catchAsync(async (req, res) => {
+	const swots = await userService.renameSwot(req, res);
+	res.status(httpStatus.CREATED).send({
+		success: true,
+		message: 'Swot Renamed Successful',
+	});
+});
+
 module.exports = {
 	register,
 	login,
@@ -122,4 +129,5 @@ module.exports = {
 	getSwots,
 	getSwot,
 	modifySwot,
+	renameSwot,
 };

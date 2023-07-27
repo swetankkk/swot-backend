@@ -57,6 +57,11 @@ const patchIndivisualSwot = {
 		threats: Joi.array().items(Joi.string()).max(3),
 	}),
 };
+const verifyRenameBody = {
+	body: Joi.object().keys({
+		name: Joi.string().required(),
+	}),
+};
 module.exports = {
 	register,
 	login,
@@ -66,4 +71,5 @@ module.exports = {
 	resetPassword,
 	verifyEmail,
 	patchIndivisualSwot,
+	verifyRenameBody,
 };

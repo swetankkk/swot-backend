@@ -39,4 +39,12 @@ router
 		authController.modifySwot
 	);
 
+router
+	.route('/renameswot/:id')
+	.patch(
+		auth(),
+		validate(authValidation.verifyRenameBody),
+		authController.renameSwot
+	);
+
 module.exports = router;
