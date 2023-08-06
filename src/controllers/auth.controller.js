@@ -4,7 +4,7 @@ const {
 	authService,
 	userService,
 	tokenService,
-	//emailService,
+	emailService,
 } = require('../services');
 const logger = require('../config/logger');
 
@@ -20,7 +20,6 @@ const register = catchAsync(async (req, res) => {
 	}
 	const tokens = await tokenService.generateAuthTokens(user);
 	//await emailService.sendVerificationEmail(user, tokens.verificationToken);
-	//remove password from response and check other parameters
 	res.status(httpStatus.CREATED).send({
 		success: true,
 		message: 'Registration Successful',
@@ -68,7 +67,7 @@ const sendVerificationEmail = catchAsync(async (req, res) => {
 		req.user
 	);
 	await emailService.sendVerificationEmail(req.user.email, verifyEmailToken);
-	res.status(httpStatus.NO_CONTENT).send();
+	res.status(httpStatus.ACCEPTED).send();
 });
 
 const verifyEmail = catchAsync(async (req, res) => {

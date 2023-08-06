@@ -70,7 +70,6 @@ const modifySwot = async (req, res) => {
 		[`swot.${id}.opportunities`]: req.body.opportunities,
 		[`swot.${id}.threats`]: req.body.threats,
 	};
-	console.log('Update : ', update);
 	await User.findByIdAndUpdate(req.user._id, { $set: update }, { new: true });
 	return swots.swot;
 };

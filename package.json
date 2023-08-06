@@ -20,6 +20,7 @@
 		"lodash": "^4.17.21",
 		"moment": "^2.29.4",
 		"mongoose": "^6.5.4",
+		"nodemailer": "^6.9.4",
 		"passport": "^0.6.0",
 		"passport-jwt": "^4.0.1",
 		"pm2": "^5.2.0",

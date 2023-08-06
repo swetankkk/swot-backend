@@ -17,3 +17,4 @@ Object Schema Validations using joi in config, validate(middleware) , auth and u
 Error handling middleware\ and fix response codes in response
 Stop generation of Unlimited Tokens in login\
 Seprate out validation for login and logout\
+To be added router.post('/logout-all',auth(),authController.logoutAll) Logs out all logged in sessions

@@ -64,25 +64,38 @@ const saveToken = async (token, userId, expires, type, blacklisted = false) => {
 };
 
 const verifyToken = async (token, type) => {
-	logger.info('Running verify token : ', token, type);
 	const payload = jwt.verify(token, config.jwt.secret);
 
-	logger.info('Payload: ', payload);
 	const tokenDoc = await Token.findOne({
 		token,
 		type,
 		user: payload.sub,
 		blacklisted: false,
 	});
-	logger.info('Token Doc');
 	if (!tokenDoc) {
 		throw new Error('token not found');
 	}
 	return tokenDoc;
 };
 
+const generateVerifyEmailToken = async (user) => {
+	const expires = moment().add(
+		config.jwt.verifyEmailExpirationMinutes,
+		'minutes'
+	);
+	const verifyEmailToken = generateToken(
+		user.id,
+		expires,
+		tokenTypes.VERIFY_EMAIL
+	);
+	await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
+	return verifyEmailToken;
+};
+
 module.exports = {
 	generateToken,
 	generateAuthTokens,
 	verifyToken,
+	generateVerifyEmailToken,
+	saveToken,
 };
