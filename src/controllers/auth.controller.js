@@ -63,16 +63,30 @@ const resetPassword = catchAsync(async (req, res) => {
 });
 
 const sendVerificationEmail = catchAsync(async (req, res) => {
-	const verifyEmailToken = await tokenService.generateVerifyEmailToken(
-		req.user
-	);
-	await emailService.sendVerificationEmail(req.user.email, verifyEmailToken);
-	res.status(httpStatus.ACCEPTED).send();
+	const isEmailVerified = await authService.isEmailVerified(req.user._id);
+	if (isEmailVerified) {
+		res.status(httpStatus.CONFLICT).send({
+			success: false,
+			message: 'Email already verified',
+		});
+	} else {
+		const verifyEmailToken = await tokenService.generateVerifyEmailToken(
+			req.user
+		);
+		await emailService.sendVerificationEmail(req.user.email, verifyEmailToken);
+		res.status(httpStatus.ACCEPTED).send({
+			success: true,
+			message: 'Email Verification Sent',
+		});
+	}
 });
 
 const verifyEmail = catchAsync(async (req, res) => {
 	await authService.verifyEmail(req.query.token);
-	res.status(httpStatus.NO_CONTENT).send();
+	res.status(httpStatus.OK).send({
+		success: true,
+		message: 'Email Verification Successful',
+	});
 });
 
 const getSwots = catchAsync(async (req, res) => {

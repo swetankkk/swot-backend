@@ -78,9 +78,26 @@ const verifyEmail = async (verifyEmailToken) => {
 	}
 };
 
+const isEmailVerified = async (userId) => {
+	const user = await userService.getUserById(userId);
+	return user.isEmailVerified;
+};
+/*const isEmailVerified = async (email) => {
+	const user = await User.findOne({ email });
+	if (!user) {
+		throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+	}
+	if (user.isEmailVerified) {
+		throw new ApiError(httpStatus.BAD_REQUEST, 'Email already verified');
+	}
+	return user;
+}*/
+
 module.exports = {
 	loginUserWithEmailAndPassword,
 	logout,
 	refreshAuth,
 	resetPassword,
+	verifyEmail,
+	isEmailVerified,
 };

@@ -28,7 +28,11 @@ router.post(
 	auth(),
 	authController.sendVerificationEmail
 );
-//router.post("/verify-email", authController.verifyEmail);
+router.post(
+	'/verify-email',
+	validate(authValidation.verifyEmail),
+	authController.verifyEmail
+);
 
 router.route('/getswots').get(auth(), authController.getSwots);
 
