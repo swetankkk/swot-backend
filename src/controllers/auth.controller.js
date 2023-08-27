@@ -91,11 +91,20 @@ const verifyEmail = catchAsync(async (req, res) => {
 
 const getSwots = catchAsync(async (req, res) => {
 	const swots = await userService.getSwots(req, res);
-	res.status(httpStatus.OK).send({
-		success: true,
-		message: 'Swots Fetched Successful',
-		data: { swots },
-	});
+	console.log('Swots : ', swots);
+	if (swots) {
+		res.status(httpStatus.OK).send({
+			success: true,
+			message: 'Swots Fetched Successful',
+			data: { swots },
+		});
+	} else {
+		res.status(httpStatus.NO_CONTENT).send({
+			success: false,
+			message: 'Swots Not Found',
+			data: {},
+		});
+	}
 });
 const getSwot = catchAsync(async (req, res) => {
 	const swots = await userService.getSwots(req, res);
