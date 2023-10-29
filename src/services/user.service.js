@@ -57,7 +57,6 @@ const getSwot = async (req, res) => {
 	//console.log('Req.user :', req.user);
 	const swots = await User.findById(req.user._id);
 	return swots.swot;
-	//console.log('Swots : ', swots.swot);
 };
 
 const modifySwot = async (req, res) => {

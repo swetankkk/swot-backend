@@ -4,6 +4,7 @@ const config = require('../config/config');
 const { tokenTypes } = require('../config/tokens');
 const { Token } = require('../models');
 const logger = require('../config/logger');
+const httpStatus = require('http-status');
 
 const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
 	const payload = {
@@ -63,8 +64,9 @@ const saveToken = async (token, userId, expires, type, blacklisted = false) => {
 	return tokenDoc;
 };
 
-const verifyToken = async (token, type) => {
-	const payload = await jwt.verify(token, config.jwt.secret);
+const verifyToken = async (req, type, res) => {
+	const payload = await jwt.verify(req.query.token, config.jwt.secret);
+	const token = req.query.token;
 	const tokenDoc = await Token.findOne({
 		token,
 		type,
@@ -72,7 +74,10 @@ const verifyToken = async (token, type) => {
 		blacklisted: false,
 	});
 	if (!tokenDoc) {
-		throw new Error('token not found');
+		res.status(httpStatus.BAD_REQUEST).send({
+			success: false,
+			message: 'BAD Request',
+		});
 	}
 	return tokenDoc;
 };

@@ -19,7 +19,6 @@ const register = catchAsync(async (req, res) => {
 			.send();
 	}
 	const tokens = await tokenService.generateAuthTokens(user);
-	//await emailService.sendVerificationEmail(user, tokens.verificationToken);
 	res.status(httpStatus.CREATED).send({
 		success: true,
 		message: 'Registration Successful',
@@ -73,6 +72,7 @@ const sendVerificationEmail = catchAsync(async (req, res) => {
 		const verifyEmailToken = await tokenService.generateVerifyEmailToken(
 			req.user
 		);
+		console.log('verifyEmailToken :', verifyEmailToken);
 		await emailService.sendVerificationEmail(req.user.email, verifyEmailToken);
 		res.status(httpStatus.ACCEPTED).send({
 			success: true,
@@ -82,16 +82,23 @@ const sendVerificationEmail = catchAsync(async (req, res) => {
 });
 
 const verifyEmail = catchAsync(async (req, res) => {
-	await authService.verifyEmail(req.query.token);
-	res.status(httpStatus.OK).send({
-		success: true,
-		message: 'Email Verification Successful',
-	});
+	try {
+		const response = await authService.verifyEmail(req, res);
+
+		res.status(httpStatus.OK).send({
+			success: true,
+			message: 'Email Verification Successful',
+		});
+	} catch (error) {
+		res.status(httpStatus.BAD_REQUEST).send({
+			success: false,
+			message: 'BAD Request',
+		});
+	}
 });
 
 const getSwots = catchAsync(async (req, res) => {
 	const swots = await userService.getSwots(req, res);
-	console.log('Swots : ', swots);
 	if (swots) {
 		res.status(httpStatus.OK).send({
 			success: true,

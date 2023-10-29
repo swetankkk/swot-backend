@@ -12,13 +12,13 @@ if (config.env === 'test') {
 }
 
 const sendEmail = async (to, subject, text) => {
-	const msg = { from: config.email.from, to, subject, text };
+	const msg = { from: config.email.from, to, subject, html: text };
 	await transport.sendMail(msg);
 };
 
 const sendVerificationEmail = async (to, token) => {
 	const subject = 'Verify your email';
-	const template = `<p>Click <a href="${config.appUrl}/verify-email?token=${token}">here</a> to verify your email</p>`;
+	const template = `Click <a href="${config.appUrl}/verify-email?token=${token}">here</a> to verify your email`;
 	await sendEmail(to, subject, template);
 };
 
